@@ -47,6 +47,7 @@ by @karminski-牙医
 - [什么是 Sliding Window Attention](20250522-what-is-sliding-window-attention/what-is-sliding-window-attention.md) - 什么是滑动窗口注意力
 - [什么时候应该微调, 什么时候不应该微调?](20250530-When-to-Use-Fine-Tuning-and-When-Not-To/When-to-Use-Fine-Tuning-and-When-Not-To.md) - 微调和RAG还如何选择?
 - [Qwen3 扩展到 1M 上下文是如何做到的?](20250809-What-is-Dual-Chunk-Attention/What-is-Dual-Chunk-Attention.md) - 什么是 DCA?
+- [什么是召回](20250812-What-is-Recall/What-is-Recall.md) - 召回影响大模型哪些方面的性能?
 
 ### 数学相关
 - [什么是矩阵的秩？什么是低秩矩阵？](20250227-what-is-rank-in-matrix/what-is-rank-in-matrix.md) - 什么是矩阵的秩？什么是低秩矩阵？
