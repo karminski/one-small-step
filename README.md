@@ -49,6 +49,7 @@ by @karminski-牙医
 - [什么是vibe coding?](20250611-what-is-vibe-coding/what-is-vibe-coding.md) - 什么是氛围编码?
 - [Qwen3 扩展到 1M 上下文是如何做到的?](20250809-What-is-Dual-Chunk-Attention/What-is-Dual-Chunk-Attention.md) - 什么是 DCA?
 - [什么是召回](20250812-What-is-Recall/What-is-Recall.md) - 召回影响大模型哪些方面的性能?
+- [什么是上下文工程](./20250828-what-is-context-engineering/What_is_context_engineering.md) - 什么是上下文工程？
 
 
 ### 数学相关
