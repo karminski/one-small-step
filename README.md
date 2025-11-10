@@ -65,7 +65,7 @@ by @karminski-牙医
 - [CLX 会是大语言模型的内存解决方案吗?](20250125-does-CXL-will-be-LLM-memory-solution/does-CXL-will-be-LLM-memory-solution.md) - 什么? PCIe 上能插内存了?
 - [什么是 1DPC](20250131-what-is-1DPC/what-is-1DPC.md) - 什么是 1DPC? 为什么内存条要插在远端插槽?
 - [什么是 L1 缓存](20250206-what-is-L1-cache/what-is-L1-cache.md) - 什么是 L1 缓存? 它的工作原理是什么?
-  
+- [什么是 MCP](20250902-what-is-mcp/What-is-mcp.md) - 什么是 MCP? 它的核心概念是什么?
 ## 贡献
 
 由于个人能力有限, 难免会有错误, 欢迎大家指正, 任何形式的贡献或者讨论都十分欢迎, 可以提交 issue 或者直接 PR.
