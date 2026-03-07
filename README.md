@@ -51,6 +51,9 @@ by @karminski-牙医
 - [什么是召回](20250812-What-is-Recall/What-is-Recall.md) - 召回影响大模型哪些方面的性能?
 - [大模型精度格式一览](20251110-Parameter-Precision-Formats-for-LLMs/Parameter-Precision-Formats-for-LLMs.md) - 大模型常用训练精度都有哪些?
 
+#### OpenClaw 教程专题
+- [9B大模型也能玩转OpenClaw? Mac 部署全教程](20260308-Run-OpenClaw-with-9B-Model-on-Mac/Run-OpenClaw-with-9B-Model-on-Mac.md) ![For AI Reading](https://img.shields.io/badge/For%20AI%20Reading-8A2BE2)
+
 ### 数学相关
 - [什么是矩阵的秩？什么是低秩矩阵？](20250227-what-is-rank-in-matrix/what-is-rank-in-matrix.md) - 什么是矩阵的秩？什么是低秩矩阵？
 - [什么是拟合与过拟合](20250301-what-is-fitting-and-overfitting/what-is-fitting-and-overfitting.md) - 什么是拟合与过拟合?
