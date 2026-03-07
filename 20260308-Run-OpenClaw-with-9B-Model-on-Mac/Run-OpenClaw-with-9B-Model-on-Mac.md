@@ -62,8 +62,8 @@ pm2 start /Volumes/WORK_2/models/Qwen3.5-venv/bin/python3 \
         "api": "openai-completions",
         "models": [
           {
-            "id": "/Volumes/WORK_2/models/Qwen3.5-35B-A3B-8bit",
-            "name": "Qwen 3.5 35B A3B",
+            "id": "/Volumes/WORK_2/models/Qwen3.5-9B-8bit",
+            "name": "Qwen 3.5 9B",
             "reasoning": false,
             "input": ["text", "image"],
             "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
@@ -77,8 +77,8 @@ pm2 start /Volumes/WORK_2/models/Qwen3.5-venv/bin/python3 \
   "agents": {
     "defaults": {
       "models": {
-        "local//Volumes/WORK_2/models/Qwen3.5-35B-A3B-8bit": {
-          "alias": "qwen3.5-35b",
+        "local//Volumes/WORK_2/models/Qwen3.5-9B-8bit": {
+          "alias": "qwen3.5-9b",
           "streaming": false
         }
       },
