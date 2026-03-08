@@ -1,8 +1,8 @@
-# 9B大模型也能玩转OpenClaw? Mac 部署全教程
+# 9B大模型也能玩转 OpenClaw? Mac 部署全教程
 
 简单来讲, Qwen 新推出的 Qwen3.5 9B, 35B-A3B, 27B 模型都支持一定程度的工具调用, 且模型能力对于日常任务来说也够用, 那么作为 OpenClaw 使用的模型也是可以的.
 
-我也验证了一下, 测试在 OpenClaw 接入的情况下, 无论是多模态的图片输入还是工具调用都挺流畅的.
+我也验证了一下, 测试在 OpenClaw 接入的情况下, 无论是多模态的图片输入还是工具调用都挺流畅的. 而复杂场景 (比如连续工具调用), 更推荐 GLM-4.7-flash (全能型) 或者 kimi-linear (特别适合处理长文本, 线性注意力速度很快, 且模型召回能力好).
 
 这篇文章准确的来讲是给你的AI看的, 如果你配置卡住了, 让 AI 看这篇文章, 然后帮你配置就可以了, 甚至如果你本地没有 OpenClaw, 你可以本地开一个 claude code, 让 claude code 参考我这篇文章帮你在 Mac 上部署.
 
@@ -10,7 +10,17 @@
 
 OpenClaw 是个人 AI 助手框架, 可以接各种大模型 API. 我想让它接我 Mac 上用 mlx_vlm 跑的本地模型 (Qwen3.5 系列), 这样不用花钱, 也不用担心隐私.
 
-推理框架用的是 mlx_vlm, 它提供了一个 OpenAI 兼容的 HTTP API. 理论上配个 baseUrl 就能用. 
+推理框架用的是 mlx_lm 或 mlx_vlm (Qwen3.5系列), 它提供了一个 OpenAI 兼容的 HTTP API. 理论上配个 baseUrl 就能用. 
+
+## 模型选型
+
+| 模型 | 参数量-激活参数量 | 优势 | 劣势 | 建议量化版本 |
+|------|-----|------|-------------|-------------|
+| GLM-4.7-flash | 30B-A3B | 全能型, 且Agent能力突出, 特别适合搭配 OpenClaw 使用 | 长文本召回能力会比 kimi-linear 差一些 | 8bit, 不要低于4bit |
+| kimi-linear | 48B-A3B  | 线性注意力, prefill 和推理速度巨快, 且长文本召回能力很强, 很适合处理大量文本的工作 | Agent 能力较 GLM-4.7-flash 差一些 | 8bit, 不要低于4bit |
+| Qwen3.5-35B-A3B | 35B-A3B | 支持多模态输入, 激活参数量小, 所以速度很快 | Agent 能力适中, 另外 mlx_vlm 的 prefill 速度很慢, 而 mlx 没有提供 mlx_lm 直接使用的版本 | 8bit, 不要低于4bit |
+| Qwen3.5-27B | 27B | 支持多模态输入,  Agent 能力体感比 Qwen3.5-35B-A3B 好一些 | dense 模型, 会慢一些, 另外 mlx_vlm 的 prefill 速度很慢, 而 mlx 没有提供 mlx_lm 直接使用的版本 | 5bit |
+| Qwen3.5-9B | 9B | 支持多模态输入, 显存/统一内存占用小 | Agent 能力是这几个里面垫底的, 另外 mlx_vlm 的 prefill 速度很慢, 而 mlx 没有提供 mlx_lm 直接使用的版本 | 8bit, 不要低于5bit | 
 
 ## 第零步: 下载模型
 
@@ -95,7 +105,46 @@ pm2 start /Volumes/WORK_2/models/Qwen3.5-venv/bin/python3 \
 - `"timeoutSeconds": 600` 给本地模型 10 分钟响应时间.
 - 模型引用格式是 `local//Volumes/...`, 第一个 `/` 是 provider 和 model id 的分隔符, 第二个 `/` 是路径本身.
 
-## 第四步: 可能的 Discord 权限配置问题
+## 第四步: 使用代理脚本过滤掉 mlx 不支持的字段
+
+由于 OpenClaw 发起的请求有很多字段是特殊的, 而 mlx_lm/lmx_vlm 不支持这些字段, 所以我准备了[代理脚本](./mlx-proxy.py), 可以让 OpenClaw 请求这个脚本, 然后脚本 rewrite 或者 strip 掉特殊字段, 来让推理引擎正常运行.
+
+对于Qwen3.5系列使用 mlx_vlm 推理引擎的模型, 使用默认参数启动即可:
+```
+python3 mlx-proxy.py --host 0.0.0.0 --port 10012 --upstream http://127.0.0.1:10002
+```
+
+当然你可以使用 pm2 管理服务:
+
+```
+pm2 start /Volumes/WORK_2/models/mlx-venv/bin/python3 \
+  --name "mlx-vlm-proxy" \
+  --interpreter none \
+  -- mlx-proxy.py \
+  --host 0.0.0.0 --port 10012 \
+  --upstream http://127.0.0.1:10002
+```
+
+对于 GLM-4.7-flash 或 kimi-linear 等使用 mlx_lm 推理引擎的模型, 需要去除掉 model 字段:
+
+```
+python3 mlx-proxy.py --host 0.0.0.0 --port 10014 --upstream http://127.0.0.1:10004 --strip-model
+```
+
+当然同样可以用 pm2 管理服务:
+
+```
+pm2 start /Volumes/WORK_2/models/mlx-venv/bin/python3 \
+  --name "mlx-lm-proxy-glm-4.7-flash" \
+  --interpreter none \
+  -- mlx-proxy.py \
+  --host 0.0.0.0 --port 10014 \
+  --upstream http://127.0.0.1:10004 \
+  --strip-model
+```
+
+
+## 第五步: 可能的 Discord 权限配置问题
 
 **如果你运行: `/model` 命令返回 "You are not authorized to use this command"**
 
